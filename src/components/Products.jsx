@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import Single from './Single';
 import './cart.css'
+import Carthandle from './Carthandle';
 
 
 const Products = () => {
     let [api, setApi] = useState([])
     useEffect(() => {
-        let url = `https://openapi.programming-hero.com/api/phones?search=iphone`
+        let url = `https://raw.githubusercontent.com/ProgrammingHero1/banglar-tshirt/main/public/tshirts.json`
         fetch(url)
             .then(res => res.json())
-            .then(data => setApi(data.data))
+            .then(data => setApi(data))
 
     }, [])
 
-    let [handle, serHandle] = useState([])
+    let [cart, serHandle] = useState([])
 
     let handleaddtoCart = (mahedi) => {
 
-        let total = [...handle, mahedi]
+        let total = [...cart, mahedi]
         serHandle(total)
 
+        console.log(total);
 
 
     }
 
+    
+    
 
+
+    let remove = id => {
+        let remaning = cart.filter(ts => ts._id !== id);
+        serHandle(remaning)
+
+    }
     return (
         <div className='use2side'>
 
@@ -33,7 +43,7 @@ const Products = () => {
                     api.map(mahedi =>
 
                         <Single
-                            key={mahedi.image}
+                            key={mahedi._id}
                             info={mahedi}
                             infoBtn={handleaddtoCart}
 
@@ -44,7 +54,16 @@ const Products = () => {
 
             </div>
             <div className='mt-5 text-white ml-3 h-[700px] bg-gray-500'>
+                <Carthandle
 
+                    cart={cart}
+                    key={cart._id}
+                    remove={remove}
+
+
+                >
+
+                </Carthandle>
             </div>
         </div>
     );
